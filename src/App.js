@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import * as THREE from "three";
-
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 function App() {
   useEffect(() => {
     const scene = new THREE.Scene();
@@ -20,7 +20,7 @@ function App() {
     /******** PLAN ***********/
     var geometry = new THREE.PlaneGeometry(window.innerWidth, 10, 100, 100);
     const planeMaterial = new THREE.MeshStandardMaterial({ color: 0xffffff });
-    geometry.applyMatrix4(new THREE.Matrix4().makeRotationX(-Math.PI / 4));
+    geometry.applyMatrix4(new THREE.Matrix4().makeRotationX(-Math.PI / 2));
     const plane = new THREE.Mesh(geometry, planeMaterial);
     plane.receiveShadow = true;
     scene.add(plane);
@@ -54,11 +54,18 @@ function App() {
       sphere.receiveShadow = true;
       scene.add(sphere);
     }
-
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.update();
     camera.position.z = 30;
     camera.lookAt(0, 0, 0);
     scene.add(light);
-    renderer.render(scene, camera);
+    const animate = function () {
+      requestAnimationFrame(animate);
+
+      renderer.render(scene, camera);
+    };
+
+    animate();
   }, []);
   return (
     <div className="App">
