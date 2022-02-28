@@ -5,22 +5,22 @@ function App() {
   const balls = [
     {
       x: 2,
-      y: -3,
+      y: -7,
       z: 1,
       color: 0x808b96,
     },
-    {
-      x: -2,
-      y: -10,
-      z: 0,
-      color: 0xdaf7a6,
-    },
-    {
-      x: -1,
-      y: -9,
-      z: 1,
-      color: 0x85c1e9,
-    },
+    // {
+    //   x: -2,
+    //   y: -10,
+    //   z: 0,
+    //   color: 0xdaf7a6,
+    // },
+    // {
+    //   x: -1,
+    //   y: -9,
+    //   z: 1,
+    //   color: 0x85c1e9,
+    // },
   ];
   useEffect(() => {
     const scene = new THREE.Scene();
@@ -54,7 +54,7 @@ function App() {
     /***************            PLAN            ***********/
     const geometry = new THREE.PlaneBufferGeometry(60, 60);
     const planMesh = new THREE.MeshPhongMaterial({
-      color: 0xfafafa,
+      color: 0xc3c3c3,
       side: THREE.DoubleSide,
     });
     const plan = new THREE.Mesh(geometry, planMesh);
@@ -63,8 +63,12 @@ function App() {
     plan.rotation.x = -Math.PI / 2;
     plan.rotation.y = -0.5;
     scene.add(plan);
-    ///***************************************** */
-    const sphereGeometry = new THREE.SphereGeometry(0.3, 100, 100);
+    // for (let i = 0; i < plan.geometry.vertices.length; i++) {
+    //   const element = plan.geometry.vertices[i];
+    console.log("ELMNT", plan);
+    // }
+    /***************            BALL            ***********/
+    const sphereGeometry = new THREE.SphereGeometry(0.1, 100, 100);
     for (let i = 0; i < balls.length; i++) {
       let sphereMaterial = new THREE.MeshPhongMaterial({
         color: balls[i].color,
@@ -83,19 +87,24 @@ function App() {
       plan.position.y - 2,
       plan.position.z
     );
-
     camera.lookAt(plan.position);
     scene.add(light);
+    scene.add(new THREE.AxesHelper(50));
     console.log(scene);
     const animate = function () {
       requestAnimationFrame(animate);
-      // for (let i = 1; i < scene.children.length; i++) {
-      //   if (scene.children[i].geometry?.type === "SphereGeometry") {
-      //     const element = scene.children[i].position;
-      //     element.z -= 0.01;
-      //     scene.children[i].position.set(element.x, element.y, element.z);
-      //   }
-      // }
+      let vector = new THREE.Vector2(0.1, 0.2);
+      let dy = 1;
+      for (let i = 1; i < scene.children.length; i++) {
+        if (scene.children[i].geometry?.type === "SphereGeometry") {
+          const element = scene.children[i].position;
+
+          if (element.y <= -8.6) dy = 1;
+          else if (element.y >= -0.1) dy = -1;
+          element.y += vector.y * dy;
+          scene.children[i].position.set(element.x, element.y, element.z);
+        }
+      }
       renderer.render(scene, camera);
     };
 
