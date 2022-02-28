@@ -4,21 +4,21 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 function App() {
   const balls = [
     {
-      x: 4,
-      y: 4,
-      z: 0,
+      x: 2,
+      y: -3,
+      z: 1,
       color: 0x808b96,
     },
     {
-      x: -5,
-      y: 5,
+      x: -2,
+      y: -10,
       z: 0,
       color: 0xdaf7a6,
     },
     {
-      x: -10,
-      y: -10,
-      z: 0,
+      x: -1,
+      y: -9,
+      z: 1,
       color: 0x85c1e9,
     },
   ];
@@ -52,7 +52,7 @@ function App() {
     light3.position.set(10, 4, 10);
     scene.add(light3);
     /***************            PLAN            ***********/
-    const geometry = new THREE.PlaneBufferGeometry(40, 40);
+    const geometry = new THREE.PlaneBufferGeometry(60, 60);
     const planMesh = new THREE.MeshPhongMaterial({
       color: 0xfafafa,
       side: THREE.DoubleSide,
@@ -64,7 +64,7 @@ function App() {
     plan.rotation.y = -0.5;
     scene.add(plan);
     ///***************************************** */
-    const sphereGeometry = new THREE.SphereGeometry(1, 100, 100);
+    const sphereGeometry = new THREE.SphereGeometry(0.3, 100, 100);
     for (let i = 0; i < balls.length; i++) {
       let sphereMaterial = new THREE.MeshPhongMaterial({
         color: balls[i].color,
@@ -78,19 +78,24 @@ function App() {
     }
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.update();
-    camera.position.set(0, 0, 30);
-    camera.lookAt(0, 0, 0);
+    camera.position.set(
+      plan.position.x - 5,
+      plan.position.y - 2,
+      plan.position.z
+    );
+
+    camera.lookAt(plan.position);
     scene.add(light);
     console.log(scene);
     const animate = function () {
       requestAnimationFrame(animate);
-      for (let i = 1; i < scene.children.length; i++) {
-        if (scene.children[i].geometry?.type === "SphereGeometry") {
-          const element = scene.children[i].position;
-          element.z -= 0.01;
-          scene.children[i].position.set(element.x, element.y, element.z);
-        }
-      }
+      // for (let i = 1; i < scene.children.length; i++) {
+      //   if (scene.children[i].geometry?.type === "SphereGeometry") {
+      //     const element = scene.children[i].position;
+      //     element.z -= 0.01;
+      //     scene.children[i].position.set(element.x, element.y, element.z);
+      //   }
+      // }
       renderer.render(scene, camera);
     };
 
