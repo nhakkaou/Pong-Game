@@ -8,20 +8,20 @@ function App() {
       x: 0,
       y: 0,
       z: 10,
-      color: 0x808b96,
+      color: 0x93ff0a,
     },
-    // {
-    //   x: -2,
-    //   y: -10,
-    //   z: 0,
-    //   color: 0xdaf7a6,
-    // },
-    // {
-    //   x: -1,
-    //   y: -9,
-    //   z: 1,
-    //   color: 0x85c1e9,
-    // },
+    {
+      x: -2,
+      y: 0,
+      z: 6,
+      color: 0xdaf7a6,
+    },
+    {
+      x: -1,
+      y: 4,
+      z: 10,
+      color: 0x85c1e9,
+    },
   ];
 
   useEffect(() => {
@@ -60,10 +60,15 @@ function App() {
     // texture.wrapT = THREE.RepeatWrapping;
     // texture.repeat.set(1, 1);
     const geometry = new THREE.PlaneBufferGeometry(60, 60);
-    const planMesh = new THREE.MeshPhongMaterial({
-      color: 0xc3c3c3,
-      // map: texture,
-      side: THREE.DoubleSide,
+    const planMesh = new THREE.MeshPhysicalMaterial({
+      color: 0xffffff,
+      specularColor: 0xffffff,
+      emissive: 0xfafaf,
+      metalness: 1,
+      roughness: 1,
+      reflectivity: 1,
+      clearcoat: 1,
+      clearcoatRoughness: 0.3,
     });
     const plan = new THREE.Mesh(geometry, planMesh);
     plan.position.set(0, 0, 0);
@@ -78,9 +83,14 @@ function App() {
     /***************            BALL            ***********/
     const sphereGeometry = new THREE.SphereGeometry(0.5, 100, 100);
     for (let i = 0; i < balls.length; i++) {
-      let sphereMaterial = new THREE.MeshPhongMaterial({
+      let sphereMaterial = new THREE.MeshPhysicalMaterial({
         color: balls[i].color,
-        // emissive: 0x072534,
+        emissive: 0x000000,
+        metalness: 0.5,
+        roughness: 0.5,
+        reflectivity: 0.5,
+        clearcoat: 0.5,
+        clearcoatRoughness: 0.5,
       });
       let sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
       sphere.position.set(balls[i].x, balls[i].y, balls[i].z);
@@ -103,25 +113,29 @@ function App() {
       requestAnimationFrame(animate);
       let vector = new THREE.Vector2(0.1, 0.1);
       let dy = -1;
-      for (let i = 1; i < scene.children.length; i++) {
-        if (scene.children[i].geometry?.type === "SphereGeometry") {
-          const element = scene.children[i].position;
-          element.z += vector.y * dy;
-          scene.children[i].position.set(element.x, element.y, element.z);
-          const plane = new THREE.Plane(
-            plan.position,
-            plan.geometry.parameters.width / 2
-          );
-          console.log("PLANE", plane);
-          const ray = new THREE.Ray(scene.children[i].position, plan.position)
-            // .distanceToPoint(target);
-            .intersectsPlane(plane);
+      // for (let i = 1; i < scene.children.length; i++) {
+      //   if (scene.children[i].geometry?.type === "SphereGeometry") {
+      //     const element = scene.children[i].position;
+      //     element.z += vector.y * dy;
+      //     scene.children[i].position.set(element.x, element.y, element.z);
+      //     const plane = new THREE.Plane(
+      //       plan.position,
+      //       plan.geometry.parameters.width / 2
+      //     );
+      //     console.log("PLANE", plane);
+      //     const ray = new THREE.Ray(scene.children[i].position, plan.position)
+      //       // .distanceToPoint(target);
+      //       .intersectsPlane(plane);
+      //     console.log(ray);
 
-          console.log(ray);
-
-          // if (intersect[0].distance == 0) console.log("INTERSECT", intersect);
-        }
-      }
+      //     // if (intersect[0].distance == 0) console.log("INTERSECT", intersect);
+      //   }
+      // }
+      light3.position.set(
+        camera.position.x,
+        camera.position.y,
+        camera.position.z
+      );
       renderer.render(scene, camera);
     };
 
