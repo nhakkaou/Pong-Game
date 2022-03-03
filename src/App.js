@@ -111,26 +111,30 @@ function App() {
     console.log(scene);
     const animate = function () {
       requestAnimationFrame(animate);
-      let vector = new THREE.Vector2(0.1, 0.1);
-      let dy = -1;
-      // for (let i = 1; i < scene.children.length; i++) {
-      //   if (scene.children[i].geometry?.type === "SphereGeometry") {
-      //     const element = scene.children[i].position;
-      //     element.z += vector.y * dy;
-      //     scene.children[i].position.set(element.x, element.y, element.z);
-      //     const plane = new THREE.Plane(
-      //       plan.position,
-      //       plan.geometry.parameters.width / 2
-      //     );
-      //     console.log("PLANE", plane);
-      //     const ray = new THREE.Ray(scene.children[i].position, plan.position)
-      //       // .distanceToPoint(target);
-      //       .intersectsPlane(plane);
-      //     console.log(ray);
+      let vector = new THREE.Vector2(0.07, 0.07);
+      let dy = 1;
+      for (let i = 1; i < scene.children.length; i++) {
+        if (scene.children[i].geometry?.type === "SphereGeometry") {
+          const element = scene.children[i].position;
 
-      //     // if (intersect[0].distance == 0) console.log("INTERSECT", intersect);
-      //   }
-      // }
+          const plane = new THREE.Plane(
+            new THREE.Vector3(0, 0, 1),
+            // plan.geometry.parameters.width / 40
+            0
+          );
+          console.log("PLANE", plane);
+          const sphereBB = new THREE.Box3().setFromObject(scene.children[i]);
+          if (
+            !sphereBB.intersectsPlane(plane) ||
+            scene.children[i].position.z >= 20
+          ) {
+            dy = -dy;
+            element.z += vector.y * dy;
+          }
+
+          scene.children[i].position.set(element.x, element.y, element.z);
+        }
+      }
       light3.position.set(
         camera.position.x,
         camera.position.y,
