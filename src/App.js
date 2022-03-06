@@ -1,7 +1,10 @@
 import { useEffect } from "react";
 import * as THREE from "three";
-import img from "./texture.jpeg";
+import img from "./assets/terrain.jpeg";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+import { FontLoader } from "three/examples/jsm/loaders/FontLoader.js";
+import { TextGeometry } from "three/examples/jsm/geometries/TextGeometry.js";
+import font from "./assets/fonts.json";
 function App() {
   const balls = [
     {
@@ -38,6 +41,30 @@ function App() {
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     document.body.appendChild(renderer.domElement);
+    const WIDTH_PLANE = 40;
+    const HEIGHT_PLANE = 60;
+    /********** render text */
+    // var loaderText = new FontLoader();
+    // const fontTmp = loaderText.parse(font);
+    // var geometryText = new TextGeometry("Ping Pong", {
+    //   font: fontTmp,
+    //   size: 80,
+    //   height: 3,
+    //   curveSegments: 12,
+    //   bevelEnabled: true,
+    //   bevelThickness: 10,
+    //   bevelSize: 8,
+    //   bevelSegments: 5,
+    // });
+    // var textMaterial = new THREE.MeshPhongMaterial({ color: 0xff0000 });
+
+    // var mesh = new THREE.Mesh(geometryText, textMaterial);
+    // mesh.position.set(15, 150, 15);
+    // mesh.castShadow = true;
+    // mesh.receiveShadow = true;
+    // mesh.rotation.y = Math.PI / 2;
+    // scene.add(mesh);
+
     /************             LIGHTS         ************/
     const light = new THREE.DirectionalLight(0xffffff, 0.7);
     light.castShadow = true;
@@ -58,10 +85,49 @@ function App() {
     // const texture = loader.load(img);
     // texture.wrapS = THREE.RepeatWrapping;
     // texture.wrapT = THREE.RepeatWrapping;
+    // texture.rotateX = -Math.PI / 2;
     // texture.repeat.set(1, 1);
-    const geometry = new THREE.PlaneBufferGeometry(60, 60);
+
+    const cornerTop = new THREE.Mesh(
+      new THREE.BoxGeometry(1.5, 1.5, WIDTH_PLANE),
+      new THREE.MeshPhongMaterial({ color: 0xffffff })
+    );
+    cornerTop.position.set(0, HEIGHT_PLANE / 2, 0.75);
+    cornerTop.receiveShadow = true;
+    cornerTop.rotateX(Math.PI / 2);
+    cornerTop.rotateY(Math.PI / 2);
+    scene.add(cornerTop);
+    const cornerBottom = new THREE.Mesh(
+      new THREE.BoxGeometry(1.5, 1.5, WIDTH_PLANE),
+      new THREE.MeshPhongMaterial({ color: 0xffffff })
+    );
+    cornerBottom.position.set(0, -HEIGHT_PLANE / 2, 0.75);
+    cornerBottom.receiveShadow = true;
+    cornerBottom.rotateX(Math.PI / 2);
+    cornerBottom.rotateY(Math.PI / 2);
+    scene.add(cornerBottom);
+
+    const cornerLeft = new THREE.Mesh(
+      new THREE.BoxGeometry(1.5, 1.5, HEIGHT_PLANE),
+      new THREE.MeshPhongMaterial({ color: 0xffffff })
+    );
+    cornerLeft.position.set(-WIDTH_PLANE / 2, 0, 0.75);
+    cornerLeft.receiveShadow = true;
+    cornerLeft.rotateX(Math.PI / 2);
+    scene.add(cornerLeft);
+
+    const cornerRight = new THREE.Mesh(
+      new THREE.BoxGeometry(1.5, 1.5, HEIGHT_PLANE),
+      new THREE.MeshPhongMaterial({ color: 0xffffff })
+    );
+    cornerRight.position.set(WIDTH_PLANE / 2, 0, 0.75);
+    cornerRight.receiveShadow = true;
+    cornerRight.rotateX(Math.PI / 2);
+    scene.add(cornerRight);
+    const geometry = new THREE.PlaneBufferGeometry(WIDTH_PLANE, HEIGHT_PLANE);
     const planMesh = new THREE.MeshPhysicalMaterial({
       color: 0xffffff,
+      // map: texture,
       specularColor: 0xffffff,
       emissive: 0xfafaf,
       metalness: 1,
@@ -78,7 +144,6 @@ function App() {
     scene.add(plan);
     // for (let i = 0; i < plan.geometry.vertices.length; i++) {
     //   const element = plan.geometry.vertices[i];
-    console.log("ELMNT", plan);
     // }
     /***************            BALL            ***********/
     const sphereGeometry = new THREE.SphereGeometry(0.5, 100, 100);
@@ -122,7 +187,6 @@ function App() {
             // plan.geometry.parameters.width / 40
             0
           );
-          console.log("PLANE", plane);
           const sphereBB = new THREE.Box3().setFromObject(scene.children[i]);
           if (
             !sphereBB.intersectsPlane(plane) ||
