@@ -1,17 +1,14 @@
 import { useEffect } from "react";
 import * as THREE from "three";
-import img from "./assets/terrain.jpeg";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import { FontLoader } from "three/examples/jsm/loaders/FontLoader.js";
-import { TextGeometry } from "three/examples/jsm/geometries/TextGeometry.js";
-import font from "./assets/fonts.json";
+
 function App() {
   const balls = [
     {
       x: 0,
       y: 0,
       z: 10,
-      color: 0x93ff0a,
+      color: 0xffffff,
     },
     {
       x: -2,
@@ -43,43 +40,21 @@ function App() {
     document.body.appendChild(renderer.domElement);
     const WIDTH_PLANE = 40;
     const HEIGHT_PLANE = 60;
-    /********** render text */
-    // var loaderText = new FontLoader();
-    // const fontTmp = loaderText.parse(font);
-    // var geometryText = new TextGeometry("Ping Pong", {
-    //   font: fontTmp,
-    //   size: 80,
-    //   height: 3,
-    //   curveSegments: 12,
-    //   bevelEnabled: true,
-    //   bevelThickness: 10,
-    //   bevelSize: 8,
-    //   bevelSegments: 5,
-    // });
-    // var textMaterial = new THREE.MeshPhongMaterial({ color: 0xff0000 });
-
-    // var mesh = new THREE.Mesh(geometryText, textMaterial);
-    // mesh.position.set(15, 150, 15);
-    // mesh.castShadow = true;
-    // mesh.receiveShadow = true;
-    // mesh.rotation.y = Math.PI / 2;
-    // scene.add(mesh);
-
     /************             LIGHTS         ************/
-    const light = new THREE.DirectionalLight(0xffffff, 0.7);
+    const light = new THREE.DirectionalLight(0xffffff, 0.5);
     light.castShadow = true;
-    light.position.set(0, 10, 0);
+    light.position.set(0, 0, 10);
     scene.add(light);
 
     const light2 = new THREE.DirectionalLight(0xffffff, 0.5);
     light2.castShadow = true;
-    light2.position.set(-5, 4, -5);
+    light2.position.set(0, -HEIGHT_PLANE / 2 + 3, 10);
     scene.add(light2);
 
-    const light3 = new THREE.DirectionalLight(0xffffff, 0.5);
-    light3.castShadow = true;
-    light3.position.set(10, 4, 10);
-    scene.add(light3);
+    // const light3 = new THREE.DirectionalLight(0xffffff, 0.5);
+    // light3.castShadow = true;
+    // light3.position.set(WIDTH_PLANE / 2, 10, 10);
+    // scene.add(light3);
     /***************            PLAN            ***********/
     // const loader = new THREE.TextureLoader();
     // const texture = loader.load(img);
@@ -90,7 +65,7 @@ function App() {
 
     const cornerTop = new THREE.Mesh(
       new THREE.BoxGeometry(1.5, 1.5, WIDTH_PLANE),
-      new THREE.MeshPhongMaterial({ color: 0xffffff })
+      new THREE.MeshPhongMaterial({ color: 0xadff2f })
     );
     cornerTop.position.set(0, HEIGHT_PLANE / 2, 0.75);
     cornerTop.receiveShadow = true;
@@ -99,7 +74,7 @@ function App() {
     scene.add(cornerTop);
     const cornerBottom = new THREE.Mesh(
       new THREE.BoxGeometry(1.5, 1.5, WIDTH_PLANE),
-      new THREE.MeshPhongMaterial({ color: 0xffffff })
+      new THREE.MeshPhongMaterial({ color: 0xadff2f })
     );
     cornerBottom.position.set(0, -HEIGHT_PLANE / 2, 0.75);
     cornerBottom.receiveShadow = true;
@@ -109,7 +84,7 @@ function App() {
 
     const cornerLeft = new THREE.Mesh(
       new THREE.BoxGeometry(1.5, 1.5, HEIGHT_PLANE),
-      new THREE.MeshPhongMaterial({ color: 0xffffff })
+      new THREE.MeshPhongMaterial({ color: 0xadff2f })
     );
     cornerLeft.position.set(-WIDTH_PLANE / 2, 0, 0.75);
     cornerLeft.receiveShadow = true;
@@ -118,7 +93,7 @@ function App() {
 
     const cornerRight = new THREE.Mesh(
       new THREE.BoxGeometry(1.5, 1.5, HEIGHT_PLANE),
-      new THREE.MeshPhongMaterial({ color: 0xffffff })
+      new THREE.MeshPhongMaterial({ color: 0xadff2f })
     );
     cornerRight.position.set(WIDTH_PLANE / 2, 0, 0.75);
     cornerRight.receiveShadow = true;
@@ -126,27 +101,57 @@ function App() {
     scene.add(cornerRight);
     const geometry = new THREE.PlaneBufferGeometry(WIDTH_PLANE, HEIGHT_PLANE);
     const planMesh = new THREE.MeshPhysicalMaterial({
-      color: 0xffffff,
-      // map: texture,
-      specularColor: 0xffffff,
-      emissive: 0xfafaf,
+      color: 0xba0808,
+      emissive: 0xffffff,
       metalness: 1,
-      roughness: 1,
+      roughness: 0,
       reflectivity: 1,
       clearcoat: 1,
-      clearcoatRoughness: 0.3,
+      clearcoatRoughness: 0.2,
     });
     const plan = new THREE.Mesh(geometry, planMesh);
     plan.position.set(0, 0, 0);
     plan.receiveShadow = true;
-    // plan.rotation.x = -Math.PI / 2;
-    // plan.rotation.y = -0.5;
     scene.add(plan);
-    // for (let i = 0; i < plan.geometry.vertices.length; i++) {
-    //   const element = plan.geometry.vertices[i];
-    // }
+
+    /**************************Paddle*************************** */
+    const Paddle1 = new THREE.Mesh(
+      new THREE.BoxGeometry(1.5, 2, WIDTH_PLANE / 5),
+      new THREE.MeshPhysicalMaterial({
+        color: 0x00bfff,
+        metalness: 0.5,
+        roughness: 0.5,
+        reflectivity: 1,
+        clearcoat: 0.5,
+        clearcoatRoughness: 0.5,
+      })
+    );
+    Paddle1.position.set(0, -HEIGHT_PLANE / 2 + 3, 0);
+    Paddle1.rotateX(Math.PI / 2);
+    Paddle1.rotateY(Math.PI / 2);
+    Paddle1.receiveShadow = true;
+    scene.add(Paddle1);
+
+    const Paddle2 = new THREE.Mesh(
+      new THREE.BoxGeometry(1.5, 2, WIDTH_PLANE / 5),
+      new THREE.MeshPhysicalMaterial({
+        color: 0xdc143c,
+        emissive: 0x0000,
+        metalness: 0,
+        roughness: 1,
+        reflectivity: 1,
+        clearcoat: 1,
+        clearcoatRoughness: 0.2,
+      })
+    );
+    Paddle2.position.set(0, HEIGHT_PLANE / 2 - 3, 0);
+    Paddle2.rotateX(Math.PI / 2);
+    Paddle2.rotateY(Math.PI / 2);
+    Paddle2.receiveShadow = true;
+    scene.add(Paddle2);
+
     /***************            BALL            ***********/
-    const sphereGeometry = new THREE.SphereGeometry(0.5, 100, 100);
+    const sphereGeometry = new THREE.SphereGeometry(1, 100, 100);
     for (let i = 0; i < balls.length; i++) {
       let sphereMaterial = new THREE.MeshPhysicalMaterial({
         color: balls[i].color,
@@ -163,12 +168,13 @@ function App() {
       sphere.receiveShadow = true;
       scene.add(sphere);
     }
-    const controls = new OrbitControls(camera, renderer.domElement);
-    controls.update();
+    // const controls = new OrbitControls(camera, renderer.domElement);
+    // controls.update();
+
     camera.position.set(
-      plan.position.x - 10,
-      plan.position.y - 3,
-      plan.position.z
+      -0.018223506966510716,
+      -39.32133451246589,
+      12.195381095421007
     );
     camera.lookAt(plan.position);
     scene.add(light);
@@ -199,11 +205,6 @@ function App() {
           scene.children[i].position.set(element.x, element.y, element.z);
         }
       }
-      light3.position.set(
-        camera.position.x,
-        camera.position.y,
-        camera.position.z
-      );
       renderer.render(scene, camera);
     };
 
