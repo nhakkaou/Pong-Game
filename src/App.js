@@ -1,7 +1,11 @@
 import { useEffect } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-
+import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader.js";
+import { MTLLoader } from "three/examples/jsm/loaders/MTLLoader.js";
+import Test from "./assets/OrangeBot_OBJ/OrangeBOT.obj";
+import TestTexture from "./assets/OrangeBot_OBJ/Textures/Faces.jpg";
+import TestMtl from "./assets/OrangeBot_OBJ/OrangeBOT.mtl";
 function App() {
   const balls = [
     {
@@ -55,13 +59,6 @@ function App() {
     // light3.castShadow = true;
     // light3.position.set(WIDTH_PLANE / 2, 10, 10);
     // scene.add(light3);
-    /***************            PLAN            ***********/
-    // const loader = new THREE.TextureLoader();
-    // const texture = loader.load(img);
-    // texture.wrapS = THREE.RepeatWrapping;
-    // texture.wrapT = THREE.RepeatWrapping;
-    // texture.rotateX = -Math.PI / 2;
-    // texture.repeat.set(1, 1);
 
     const cornerTop = new THREE.Mesh(
       new THREE.BoxGeometry(1.5, 1.5, WIDTH_PLANE),
@@ -170,7 +167,24 @@ function App() {
     }
     // const controls = new OrbitControls(camera, renderer.domElement);
     // controls.update();
+    /***************            Audience            ***********/
+    new MTLLoader().load(TestMtl, function (materials) {
+      materials.preload();
+      new OBJLoader().setMaterials(materials).load(Test, function (object) {
+        object.position.y = 10;
+        var texture = new THREE.TextureLoader().load(TestTexture);
 
+        object.traverse(function (child) {
+          // aka setTexture
+          if (child instanceof THREE.Mesh) {
+            child.material.map = texture;
+          }
+        });
+        scene.add(object);
+      });
+    });
+
+    /******************************************************* */
     camera.position.set(
       -0.018223506966510716,
       -39.32133451246589,
