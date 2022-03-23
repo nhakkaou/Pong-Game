@@ -1,11 +1,10 @@
 import { useEffect } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader.js";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { MTLLoader } from "three/examples/jsm/loaders/MTLLoader.js";
-import Test from "./assets/OrangeBot_OBJ/OrangeBOT.obj";
-import TestTexture from "./assets/OrangeBot_OBJ/Textures/Faces.jpg";
-import TestMtl from "./assets/OrangeBot_OBJ/OrangeBOT.mtl";
+import Test from "./assets/yaretzi/fireyaretziresp.gltf";
+
 function App() {
   const balls = [
     {
@@ -165,24 +164,35 @@ function App() {
       sphere.receiveShadow = true;
       scene.add(sphere);
     }
-    // const controls = new OrbitControls(camera, renderer.domElement);
-    // controls.update();
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.update();
     /***************            Audience            ***********/
-    new MTLLoader().load(TestMtl, function (materials) {
-      materials.preload();
-      new OBJLoader().setMaterials(materials).load(Test, function (object) {
-        object.position.y = 10;
-        var texture = new THREE.TextureLoader().load(TestTexture);
 
-        object.traverse(function (child) {
-          // aka setTexture
-          if (child instanceof THREE.Mesh) {
-            child.material.map = texture;
-          }
-        });
-        scene.add(object);
-      });
-    });
+    new GLTFLoader().load(
+      // resource URL
+      Test,
+      // called when the resource is loaded
+      function (gltf) {
+        gltf.scene.position.set(0, 0, 30);
+        gltf.scene.scale.set(2, 2, 2);
+        gltf.scene.rotateX(Math.PI / 2);
+        scene.add(gltf.scene);
+
+        // gltf.animations; // Array<THREE.AnimationClip>
+        // gltf.scene; // THREE.Group
+        // gltf.scenes; // Array<THREE.Group>
+        // gltf.cameras; // Array<THREE.Camera>
+        // gltf.asset; // Object
+      },
+      // called while loading is progressing
+      function (xhr) {
+        console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
+      },
+      // called when loading has errors
+      function (error) {
+        console.log(error);
+      }
+    );
 
     /******************************************************* */
     camera.position.set(

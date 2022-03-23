@@ -1,0 +1,40 @@
+# Blender MTL File: 'fireyaretziresp.blend'
+# Material Count: 4
+
+newmtl Material
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd manga textures\ao clothes.png
+
+newmtl Material.002
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd manga textures\ao hair.png
+
+newmtl Material.004
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.300599 0.197329 0.186010
+Ks 0.127907 0.127907 0.127907
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd C:\Users\mario\Documents\skintest.jpg
+
+newmtl None
+Ns 0
+Ka 0.000000 0.000000 0.000000
+Kd 0.8 0.8 0.8
+Ks 0.8 0.8 0.8
+d 1
+illum 2
