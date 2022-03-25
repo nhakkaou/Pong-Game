@@ -2,8 +2,9 @@ import { useEffect } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
-import { MTLLoader } from "three/examples/jsm/loaders/MTLLoader.js";
 import Test from "./assets/yaretzi/fireyaretziresp.gltf";
+import TestTexture from "./assets/yaretzi/ao clothes.png";
+import Skin from "./assets/yaretzi/skintest.jpg";
 
 function App() {
   const balls = [
@@ -54,10 +55,10 @@ function App() {
     light2.position.set(0, -HEIGHT_PLANE / 2 + 3, 10);
     scene.add(light2);
 
-    // const light3 = new THREE.DirectionalLight(0xffffff, 0.5);
-    // light3.castShadow = true;
-    // light3.position.set(WIDTH_PLANE / 2, 10, 10);
-    // scene.add(light3);
+    const light3 = new THREE.DirectionalLight(0xffffff, 0.1);
+    light3.castShadow = true;
+    // light3.position.set(camera.position);
+    scene.add(light3);
 
     const cornerTop = new THREE.Mesh(
       new THREE.BoxGeometry(1.5, 1.5, WIDTH_PLANE),
@@ -167,22 +168,43 @@ function App() {
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.update();
     /***************            Audience            ***********/
-
+    var mesh;
+    var map = new THREE.TextureLoader().load(TestTexture);
+    var skinMap = new THREE.TextureLoader().load(Skin);
+    map.encoding = THREE.sRGBEncoding;
     new GLTFLoader().load(
       // resource URL
       Test,
       // called when the resource is loaded
       function (gltf) {
-        gltf.scene.position.set(0, 0, 30);
-        gltf.scene.scale.set(2, 2, 2);
-        gltf.scene.rotateX(Math.PI / 2);
-        scene.add(gltf.scene);
+        for (let i = 0; i < gltf.scene.children.length; i++) {
+          mesh = gltf.scene.children[i];
+          mesh.material = new THREE.MeshBasicMaterial({
+            map: map,
+            color: 0xff00ff,
+          });
+          mesh.position.copy(Paddle1.position);
+          mesh.scale.set(2, 2, 2);
+          mesh.rotateX(Math.PI / 2);
+          scene.add(mesh);
+        }
+        for (let i = 0; i < gltf.scene.children.length; i++) {
+          const element = gltf.scene.children[i];
+          mesh = element;
+          mesh.material = new THREE.MeshBasicMaterial({
+            map: skinMap,
+          });
+          mesh.position.copy(Paddle1.position);
+          mesh.scale.set(2, 2, 2);
+          mesh.rotateX(Math.PI / 2);
+          scene.add(mesh);
+        }
 
-        // gltf.animations; // Array<THREE.AnimationClip>
-        // gltf.scene; // THREE.Group
-        // gltf.scenes; // Array<THREE.Group>
-        // gltf.cameras; // Array<THREE.Camera>
-        // gltf.asset; // Object
+        // gltf.scene.position.copy(Paddle1.position);
+        // gltf.scene.scale.set(2, 2, 2);
+        // gltf.scene.rotateX(Math.PI / 2);
+        // scene.add(gltf.scene);
+        console.log("Scene", scene);
       },
       // called while loading is progressing
       function (xhr) {
@@ -229,6 +251,11 @@ function App() {
           scene.children[i].position.set(element.x, element.y, element.z);
         }
       }
+      light3.position.set(
+        camera.position.x,
+        camera.position.y,
+        camera.position.z
+      );
       renderer.render(scene, camera);
     };
 
