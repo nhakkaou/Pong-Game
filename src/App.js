@@ -9,21 +9,21 @@ import Skin from "./assets/yaretzi/skintest.jpg";
 function App() {
   const balls = [
     {
-      x: 0,
-      y: 0,
-      z: 10,
+      x: 3,
+      y: 3,
+      z: 1,
       color: 0xffffff,
     },
     {
       x: -2,
-      y: 0,
-      z: 6,
+      y: -2,
+      z: 1,
       color: 0xdaf7a6,
     },
     {
-      x: -1,
-      y: 4,
-      z: 10,
+      x: 6,
+      y: 6,
+      z: 1,
       color: 0x85c1e9,
     },
   ];
@@ -168,53 +168,53 @@ function App() {
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.update();
     /***************            Audience            ***********/
-    var mesh;
-    var map = new THREE.TextureLoader().load(TestTexture);
-    var skinMap = new THREE.TextureLoader().load(Skin);
-    map.encoding = THREE.sRGBEncoding;
-    new GLTFLoader().load(
-      // resource URL
-      Test,
-      // called when the resource is loaded
-      function (gltf) {
-        for (let i = 0; i < gltf.scene.children.length; i++) {
-          mesh = gltf.scene.children[i];
-          mesh.material = new THREE.MeshBasicMaterial({
-            map: map,
-            color: 0xff00ff,
-          });
-          mesh.position.copy(Paddle1.position);
-          mesh.scale.set(2, 2, 2);
-          mesh.rotateX(Math.PI / 2);
-          scene.add(mesh);
-        }
-        for (let i = 0; i < gltf.scene.children.length; i++) {
-          const element = gltf.scene.children[i];
-          mesh = element;
-          mesh.material = new THREE.MeshBasicMaterial({
-            map: skinMap,
-          });
-          mesh.position.copy(Paddle1.position);
-          mesh.scale.set(2, 2, 2);
-          mesh.rotateX(Math.PI / 2);
-          scene.add(mesh);
-        }
+    // var mesh;
+    // var map = new THREE.TextureLoader().load(TestTexture);
+    // var skinMap = new THREE.TextureLoader().load(Skin);
+    // map.encoding = THREE.sRGBEncoding;
+    // new GLTFLoader().load(
+    //   // resource URL
+    //   Test,
+    //   // called when the resource is loaded
+    //   function (gltf) {
+    //     for (let i = 0; i < gltf.scene.children.length; i++) {
+    //       mesh = gltf.scene.children[i];
+    //       mesh.material = new THREE.MeshBasicMaterial({
+    //         map: map,
+    //         color: 0xff00ff,
+    //       });
+    //       mesh.position.copy(Paddle1.position);
+    //       mesh.scale.set(2, 2, 2);
+    //       mesh.rotateX(Math.PI / 2);
+    //       scene.add(mesh);
+    //     }
+    //     for (let i = 0; i < gltf.scene.children.length; i++) {
+    //       const element = gltf.scene.children[i];
+    //       mesh = element;
+    //       mesh.material = new THREE.MeshBasicMaterial({
+    //         map: skinMap,
+    //       });
+    //       mesh.position.copy(Paddle1.position);
+    //       mesh.scale.set(2, 2, 2);
+    //       mesh.rotateX(Math.PI / 2);
+    //       scene.add(mesh);
+    //     }
 
-        // gltf.scene.position.copy(Paddle1.position);
-        // gltf.scene.scale.set(2, 2, 2);
-        // gltf.scene.rotateX(Math.PI / 2);
-        // scene.add(gltf.scene);
-        console.log("Scene", scene);
-      },
-      // called while loading is progressing
-      function (xhr) {
-        console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
-      },
-      // called when loading has errors
-      function (error) {
-        console.log(error);
-      }
-    );
+    //     // gltf.scene.position.copy(Paddle1.position);
+    //     // gltf.scene.scale.set(2, 2, 2);
+    //     // gltf.scene.rotateX(Math.PI / 2);
+    //     // scene.add(gltf.scene);
+    //     console.log("Scene", scene);
+    //   },
+    //   // called while loading is progressing
+    //   function (xhr) {
+    //     console.log((xhr.loaded / xhr.total) * 100 + "% loaded");
+    //   },
+    //   // called when loading has errors
+    //   function (error) {
+    //     console.log(error);
+    //   }
+    // );
 
     /******************************************************* */
     camera.position.set(
@@ -226,35 +226,37 @@ function App() {
     scene.add(light);
     scene.add(new THREE.AxesHelper(50));
     console.log(scene);
+    let dy = 1;
+    let dx = 1;
     const animate = function () {
       requestAnimationFrame(animate);
-      let vector = new THREE.Vector2(0.07, 0.07);
-      let dy = 1;
-      for (let i = 1; i < scene.children.length; i++) {
-        if (scene.children[i].geometry?.type === "SphereGeometry") {
-          const element = scene.children[i].position;
-
-          const plane = new THREE.Plane(
-            new THREE.Vector3(0, 0, 1),
-            // plan.geometry.parameters.width / 40
-            0
-          );
-          const sphereBB = new THREE.Box3().setFromObject(scene.children[i]);
-          if (
-            !sphereBB.intersectsPlane(plane) ||
-            scene.children[i].position.z >= 20
-          ) {
-            dy = -dy;
-            element.z += vector.y * dy;
-          }
-
-          scene.children[i].position.set(element.x, element.y, element.z);
-        }
-      }
-      light3.position.set(
-        camera.position.x,
-        camera.position.y,
-        camera.position.z
+      let vector = new THREE.Vector2(0.5, 0.4);
+      let sphereBB = new THREE.Box3().setFromObject(scene.children[10]);
+      let cornerRightBB = new THREE.Box3().setFromObject(cornerRight);
+      let cornerLeftBB = new THREE.Box3().setFromObject(cornerLeft);
+      let cornerTopBB = new THREE.Box3().setFromObject(cornerTop);
+      let cornerBottomBB = new THREE.Box3().setFromObject(cornerBottom);
+      let Paddle1BB = new THREE.Box3().setFromObject(Paddle1);
+      let Paddle2BB = new THREE.Box3().setFromObject(Paddle2);
+      if (
+        sphereBB.intersectsBox(cornerRightBB) ||
+        sphereBB.intersectsBox(cornerLeftBB)
+      )
+        dx *= -1;
+      if (
+        sphereBB.intersectsBox(Paddle1BB) ||
+        sphereBB.intersectsBox(Paddle2BB)
+      )
+        dy *= -1;
+      if (
+        sphereBB.intersectsBox(cornerTopBB) ||
+        sphereBB.intersectsBox(cornerBottomBB)
+      )
+        scene.children[10].position.set(0, 0, 1);
+      scene.children[10].position.set(
+        scene.children[10].position.x + vector.x * dx,
+        scene.children[10].position.y + vector.y * dy,
+        scene.children[10].position.z
       );
       renderer.render(scene, camera);
     };
@@ -269,3 +271,13 @@ function App() {
 }
 
 export default App;
+
+// if (scene.children[i].geometry?.type === "SphereGeometry") {
+//   const element = scene.children[i].position;
+//   // const plane = new THREE.Plane(
+//   //   new THREE.Vector3(0, 0, 1),
+//   //   0
+//   // );
+//   //   element.z += vector.y * dy;
+//   // }
+// }
