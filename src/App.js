@@ -7,6 +7,8 @@ import TestTexture from "./assets/yaretzi/ao clothes.png";
 import Skin from "./assets/yaretzi/skintest.jpg";
 
 function App() {
+  let SpeedBall = new THREE.Vector2(0.5, 0.4);
+  let SpeedPaddle = new THREE.Vector2(0.5, 0.4);
   const balls = [
     {
       x: 3,
@@ -27,7 +29,7 @@ function App() {
       color: 0x85c1e9,
     },
   ];
-
+  const Paddle_Width = 1.5;
   useEffect(() => {
     const scene = new THREE.Scene();
     const renderer = new THREE.WebGLRenderer();
@@ -230,7 +232,7 @@ function App() {
     let dx = 1;
     const animate = function () {
       requestAnimationFrame(animate);
-      let vector = new THREE.Vector2(0.5, 0.4);
+
       let sphereBB = new THREE.Box3().setFromObject(scene.children[10]);
       let cornerRightBB = new THREE.Box3().setFromObject(cornerRight);
       let cornerLeftBB = new THREE.Box3().setFromObject(cornerLeft);
@@ -254,13 +256,21 @@ function App() {
       )
         scene.children[10].position.set(0, 0, 1);
       scene.children[10].position.set(
-        scene.children[10].position.x + vector.x * dx,
-        scene.children[10].position.y + vector.y * dy,
+        scene.children[10].position.x + SpeedBall.x * dx,
+        scene.children[10].position.y + SpeedBall.y * dy,
         scene.children[10].position.z
       );
+      for (let i = 0; i < scene.children.length; i++) {
+        if (
+          scene.children[i]?.geometry?.type === "BoxGeometry" &&
+          (i === 8 || i === 7)
+        )
+          scene.children[i].position.x =
+            scene.children[10].position.x - SpeedPaddle.x;
+      }
+
       renderer.render(scene, camera);
     };
-
     animate();
   }, []);
   return (

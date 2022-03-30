@@ -5,15 +5,25 @@ import { FontLoader } from "three/examples/jsm/loaders/FontLoader";
 import fontFile from "./assets/Fonts/helvetiker.json";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 function LandingPage() {
+  function onPointerMove(e) {
+    const pointer = new THREE.Vector2();
+    const EventsControls = new EventsControls(camera, renderer.domElement);
+    // pointer.x = (event.clientX / window.innerWidth) * 2 - 1;
+    // pointer.y = -(event.clientY / window.innerHeight) * 2 + 1;
+    // console.log(pointer);
+    // PointLight.position.set(e.clientX, e.clientY, PointLight.position.z);
+  }
+  window.addEventListener("pointermove", onPointerMove);
+  const scene = new THREE.Scene();
+  const renderer = new THREE.WebGLRenderer();
+  const camera = new THREE.PerspectiveCamera(
+    75,
+    window.innerWidth / window.innerHeight,
+    0.1,
+    1000
+  );
+  const PointLight = new THREE.PointLight(0xffffff, 1, 100);
   useEffect(() => {
-    const scene = new THREE.Scene();
-    const renderer = new THREE.WebGLRenderer();
-    const camera = new THREE.PerspectiveCamera(
-      75,
-      window.innerWidth / window.innerHeight,
-      0.1,
-      1000
-    );
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.shadowMap.enabled = true;
@@ -25,7 +35,6 @@ function LandingPage() {
       12.829180712690405,
       36.574781956038876
     );
-    const PointLight = new THREE.PointLight(0xffffff, 1, 100);
     PointLight.position.set(6, 10, 10);
     scene.add(PointLight);
     // scene.add(new THREE.AxesHelper(50));
@@ -62,8 +71,8 @@ function LandingPage() {
 
     const animate = function () {
       requestAnimationFrame(animate);
-      PointLight.position.y = Math.sin(Date.now() * 0.001) * 10;
-      PointLight.position.z = Math.sin(Date.now() * 0.001) * 10;
+      // PointLight.position.y = Math.sin(Date.now() * 0.001) * 10;
+      // PointLight.position.z = Math.sin(Date.now() * 0.001) * 10;
       renderer.render(scene, camera);
     };
     animate();
