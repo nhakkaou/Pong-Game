@@ -26,11 +26,8 @@ const Padlle = ({
   return (
     <mesh
       position={position}
-      rotateX={rotateX}
-      rotateY={rotateY}
-      recieveShadow={true}
-      castShadow={true}
       material={material}
+      rotation={[rotateX, rotateY, 0]}
     >
       <boxGeometry attach="geometry" args={args} />
     </mesh>

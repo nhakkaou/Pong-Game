@@ -1,6 +1,6 @@
 import React from "react";
 import { MeshPhysicalMaterial } from "three";
-const Ball = ({ color = "#85c1e9" }) => {
+const Ball = ({ color = "#000000" }) => {
   const meterial = new MeshPhysicalMaterial({
     color: color,
     emissive: 0x000000,
