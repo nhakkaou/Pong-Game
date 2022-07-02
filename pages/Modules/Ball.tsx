@@ -1,10 +1,18 @@
 import React from "react";
-
-const Ball = () => {
+import { MeshPhysicalMaterial } from "three";
+const Ball = ({ color = "#85c1e9" }) => {
+  const meterial = new MeshPhysicalMaterial({
+    color: color,
+    emissive: 0x000000,
+    metalness: 0.5,
+    roughness: 0.5,
+    reflectivity: 0.5,
+    clearcoat: 0.5,
+    clearcoatRoughness: 0.5,
+  });
   return (
-    <mesh position={[0, 0, 0]}>
-      <sphereBufferGeometry attach="geometry" args={[1, 32, 32]} />
-      <meshPhysicalMaterial color="#daf7a6" attach="material" />
+    <mesh position={[3, 3, 1]} material={meterial}>
+      <sphereBufferGeometry attach="geometry" args={[1, 100, 100]} />
     </mesh>
   );
 };
