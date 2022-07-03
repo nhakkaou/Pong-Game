@@ -1,10 +1,12 @@
 import { MeshPhysicalMaterial } from "three";
+
 type typePadle = {
   position?: [number, number, number];
   color?: string;
   args: [number, number, number];
   rotateX?: number;
   rotateY?: number;
+  name?: string;
 };
 
 const Padlle = ({
@@ -13,6 +15,7 @@ const Padlle = ({
   rotateY = 0,
   color = "#00bfff",
   args,
+  name,
 }: typePadle) => {
   const material = new MeshPhysicalMaterial({
     color: color,
@@ -28,6 +31,7 @@ const Padlle = ({
       position={position}
       material={material}
       rotation={[rotateX, rotateY, 0]}
+      name={name}
     >
       <boxGeometry attach="geometry" args={args} />
     </mesh>

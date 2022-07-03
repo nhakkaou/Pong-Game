@@ -1,11 +1,25 @@
 import type { NextPage } from "next";
 import styles from "../styles/Home.module.css";
 import { Canvas } from "@react-three/fiber";
-import Ball from "./Modules/Ball";
-import Controll from "./Modules/Controll";
-import Stage from "./Modules/Stage";
-import Padlle from "./Modules/Padlle";
+import Game from "./Game";
+import { useEffect, useState } from "react";
 const Home: NextPage = () => {
+  const [size, setWindow] = useState({
+    width: 40,
+    height: 60,
+  });
+  const handleResize = () => {
+    setWindow({
+      width: window.innerWidth,
+      height: window.innerHeight,
+    });
+  };
+  useEffect(() => {
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
   return (
     <div className={styles.container}>
       <Canvas
@@ -20,26 +34,9 @@ const Home: NextPage = () => {
         }}
         className={styles.canvas}
       >
+        <directionalLight position={[0, 0, 10]} color={"white"} intensity={1} />
         <ambientLight intensity={0.8} color={"white"} />
-        <Ball />
-        <Stage />
-        {/* Player 1 */}
-        <Padlle
-          position={[0, -60 / 2 + 3, 0]}
-          args={[1.5, 2, 40 / 5]}
-          rotateX={Math.PI / 2}
-          rotateY={Math.PI / 2}
-          color="#9ffe47"
-        />
-        {/* Player 2 */}
-        <Padlle
-          position={[0, 60 / 2 - 3, 0]}
-          args={[1.5, 2, 40 / 5]}
-          rotateX={Math.PI / 2}
-          rotateY={Math.PI / 2}
-          color="#bb3a27"
-        />
-        <Controll />
+        <Game size={size} />
       </Canvas>
     </div>
   );

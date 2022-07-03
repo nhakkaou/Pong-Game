@@ -3,7 +3,7 @@ import Padlle from "./Padlle";
 
 const Stage = () => {
   const material = new MeshPhysicalMaterial({
-    color: "#ffffff",
+    color: "#C19A6B",
     emissive: 0x000000,
     metalness: 0.5,
     roughness: 0.5,
@@ -11,6 +11,7 @@ const Stage = () => {
     clearcoat: 0.5,
     clearcoatRoughness: 0.5,
   });
+
   return (
     <>
       <mesh castShadow={true} material={material}>
@@ -19,7 +20,7 @@ const Stage = () => {
       {/* // TOP */}
       <Padlle
         position={[0, 60 / 2, 0.75]}
-        color="#00bfff"
+        color="#4a2bd6"
         args={[1.5, 1.5, 40]}
         rotateX={Math.PI / 2}
         rotateY={Math.PI / 2}
@@ -27,7 +28,7 @@ const Stage = () => {
       {/* BOTTOM */}
       <Padlle
         position={[0, -60 / 2, 0.75]}
-        color="#00bfff"
+        color="#4a2bd6"
         args={[1.5, 1.5, 40]}
         rotateX={Math.PI / 2}
         rotateY={Math.PI / 2}
@@ -35,15 +36,15 @@ const Stage = () => {
       {/* LEFT */}
       <Padlle
         position={[-40 / 2, 0, 0.75]}
-        color="#00bfff"
-        args={[1.5, 1.5, 60]}
+        color="#4a2bd6"
+        args={[1.5, 1.5, 61.5]}
         rotateX={Math.PI / 2}
       />
       {/* RIGHT */}
       <Padlle
         position={[40 / 2, 0, 0.75]}
-        color="#00bfff"
-        args={[1.5, 1.5, 60]}
+        color="#4a2bd6"
+        args={[1.5, 1.5, 61.5]}
         rotateX={Math.PI / 2}
       />
     </>

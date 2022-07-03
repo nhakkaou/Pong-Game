@@ -1,6 +1,10 @@
 import React from "react";
 import { MeshPhysicalMaterial } from "three";
-const Ball = ({ color = "#000000" }) => {
+
+type Props = {
+  color?: string;
+};
+const Ball = React.forwardRef(({ color = "#1C1B27" }: Props, ref) => {
   const meterial = new MeshPhysicalMaterial({
     color: color,
     emissive: 0x000000,
@@ -15,6 +19,6 @@ const Ball = ({ color = "#000000" }) => {
       <sphereBufferGeometry attach="geometry" args={[1, 100, 100]} />
     </mesh>
   );
-};
+});
 
 export default Ball;
