@@ -1,11 +1,11 @@
 import React from "react";
-import { MeshPhysicalMaterial } from "three";
+import * as THREE from "three";
 
 type Props = {
   color?: string;
 };
-const Ball = React.forwardRef(({ color = "#1C1B27" }: Props, ref) => {
-  const meterial = new MeshPhysicalMaterial({
+const Ball = React.forwardRef(({ color = "#1C1B27" }: Props, ref: any) => {
+  const meterial = new THREE.MeshPhysicalMaterial({
     color: color,
     emissive: 0x000000,
     metalness: 0.5,
@@ -15,7 +15,7 @@ const Ball = React.forwardRef(({ color = "#1C1B27" }: Props, ref) => {
     clearcoatRoughness: 0.5,
   });
   return (
-    <mesh position={[3, 3, 1]} material={meterial}>
+    <mesh position={[3, 3, 1]} material={meterial} ref={ref}>
       <sphereBufferGeometry attach="geometry" args={[1, 100, 100]} />
     </mesh>
   );
