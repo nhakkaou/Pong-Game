@@ -5,8 +5,8 @@ import Game from "./Game";
 import { useEffect, useState } from "react";
 const Home: NextPage = () => {
   const [size, setWindow] = useState({
-    width: 40,
-    height: 60,
+    width: 1000,
+    height: 1000,
   });
   const handleResize = () => {
     setWindow({
@@ -15,6 +15,10 @@ const Home: NextPage = () => {
     });
   };
   useEffect(() => {
+    setWindow({
+      width: window.innerWidth,
+      height: window.innerHeight,
+    });
     window.addEventListener("resize", handleResize);
     return () => {
       window.removeEventListener("resize", handleResize);
@@ -26,9 +30,7 @@ const Home: NextPage = () => {
         shadows={true}
         camera={{
           fov: 75,
-          position: [
-            -0.018223506966510716, -39.32133451246589, 11.195381095421007,
-          ],
+          position: [-0.018223506966510716, -54, 20],
           near: 0.1,
           far: 1000,
         }}

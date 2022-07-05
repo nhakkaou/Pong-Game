@@ -1,4 +1,6 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+Pong is a table tennis–themed twitch arcade sports video game, i try to create it 3D using THREEJS and ReactThree/Fiber
+
+<img src="./public/Screen.png" width="500"/>
 
 ## Getting Started
 
