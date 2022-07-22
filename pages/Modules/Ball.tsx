@@ -20,5 +20,5 @@ const Ball = React.forwardRef(({ color = "#1C1B27" }: Props, ref: any) => {
     </mesh>
   );
 });
-
+Ball.displayName = "Ball";
 export default Ball;

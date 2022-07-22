@@ -14,7 +14,7 @@ type Props = {
 
 const Game = ({ size }: Props) => {
   // const [positionX, setPositionX] = useState(0);
-  const { camera } = useThree();
+  const { camera }: any = useThree();
   useEffect(() => {
     if (size.width < 1000) camera.fov = 110;
     if (size.width > 1000) camera.fov = 100;
@@ -30,7 +30,7 @@ const Game = ({ size }: Props) => {
   const cornerLeft = useRef<any>();
   const cornerRight = useRef<any>();
 
-  function detectCollisionCubes(object1, object2) {
+  function detectCollisionCubes(object1: any, object2: any) {
     let object1Box = new THREE.Box3().setFromObject(object1);
 
     let object2Box = new THREE.Box3().setFromObject(object2);

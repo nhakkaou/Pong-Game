@@ -59,5 +59,6 @@ const Stage = React.forwardRef((props, ref: any) => {
     </>
   );
 });
+Stage.displayName = "Stage";
 
 export default Stage;

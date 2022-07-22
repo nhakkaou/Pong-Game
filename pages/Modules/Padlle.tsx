@@ -45,4 +45,6 @@ const Padlle = React.forwardRef(
   }
 );
 
+Padlle.displayName = "Padlle";
+
 export default Padlle;
