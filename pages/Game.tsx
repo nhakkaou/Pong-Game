@@ -4,15 +4,11 @@ import Stage from "./Modules/Stage";
 import Padlle from "./Modules/Padlle";
 import { useEffect, useRef } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
+import { usePersonControls, resize } from "./Hooks/movement";
 import * as THREE from "three";
-type Props = {
-  size: {
-    width: number;
-    height: number;
-  };
-};
+const PADDLE_SIZE = 40 / 5;
 
-const Game = ({ size }: Props) => {
+const Game = () => {
   const { camera }: any = useThree();
   const player = useRef<any>();
   const player2 = useRef<any>();
@@ -21,10 +17,15 @@ const Game = ({ size }: Props) => {
   const cornerBottom = useRef<any>();
   const cornerLeft = useRef<any>();
   const cornerRight = useRef<any>();
+  const [score, setScore] = React.useState(0);
+  const [load, setLoad] = React.useState(false);
   let dx = 1;
   let dy = 1;
-  let positionX = 0;
-
+  let { left, right } = usePersonControls();
+  let size = resize();
+  useEffect(() => {
+    setLoad(true);
+  }, []);
   useEffect(() => {
     if (size.width < 1000) camera.fov = 110;
     if (size.width > 1000) camera.fov = 100;
@@ -34,61 +35,62 @@ const Game = ({ size }: Props) => {
 
   function detectCollisionCubes(object1: any, object2: any) {
     let object1Box = new THREE.Box3().setFromObject(object1);
-
     let object2Box = new THREE.Box3().setFromObject(object2);
     let collision = object1Box.intersectsBox(object2Box);
     return collision;
   }
   useFrame(({ gl, scene, camera }) => {
-    if (ball.current) {
+    if (load) {
+      console.log(detectCollisionCubes(ball.current, player.current));
+      if (ball.current) {
+        if (
+          detectCollisionCubes(ball.current, cornerLeft.current) ||
+          detectCollisionCubes(ball.current, cornerRight.current)
+        ) {
+          console.log("collision with corner");
+          dx *= -1;
+        }
+        if (
+          detectCollisionCubes(ball.current, player.current) ||
+          detectCollisionCubes(ball.current, player2.current)
+        ) {
+          console.log("collision with player");
+          dy *= -1;
+        }
+        if (
+          detectCollisionCubes(ball.current, cornerTop.current) ||
+          detectCollisionCubes(ball.current, cornerBottom.current)
+        ) {
+          setScore(score + 1);
+          ball.current.position?.set(0, 0, 1);
+        }
+        ball.current.position?.set(
+          ball.current.position.x + 0.2 * dx,
+          ball.current.position.y + 0.2 * dy,
+          ball.current.position.z
+        );
+        player2.current.position.x = ball.current.position.x;
+      }
       if (
-        detectCollisionCubes(ball.current, cornerLeft.current) ||
-        detectCollisionCubes(ball.current, cornerRight.current)
+        player.current.position.x +
+          PADDLE_SIZE / 2 +
+          Number(right) -
+          Number(left) <=
+          cornerRight.current.position.x &&
+        player.current.position.x -
+          PADDLE_SIZE / 2 +
+          Number(right) -
+          Number(left) >=
+          cornerLeft.current.position.x
       )
-        dx *= -1;
-      if (
-        detectCollisionCubes(ball.current, player.current) ||
-        detectCollisionCubes(ball.current, player2.current)
-      )
-        dy *= -1;
-      if (
-        detectCollisionCubes(ball.current, cornerTop.current) ||
-        detectCollisionCubes(ball.current, cornerBottom.current)
-      )
-        ball.current.position?.set(0, 0, 1);
-      ball.current.position?.set(
-        ball.current.position.x + 0.2 * dx,
-        ball.current.position.y + 0.2 * dy,
-        ball.current.position.z
-      );
-      player2.current.position.x = ball.current.position.x;
-      player.current.position.set(
-        positionX,
-        player.current.position.y,
-        player.current.position.z
-      );
+        player.current.position.set(
+          player.current.position.x + Number(right) - Number(left),
+          player.current.position.y,
+          player.current.position.z
+        );
     }
     gl.render(scene, camera);
   }, 1);
-
-  const handlePress = (e: any) => {
-    if (e.key === "ArrowRight") {
-      if (player.current?.position.x + 4 < 20)
-        positionX = player.current?.position.x + 2;
-    }
-    if (e.key === "ArrowLeft") {
-      if (player.current?.position.x - 4 > -20)
-        positionX = player.current?.position.x - 2;
-    }
-    console.log(positionX);
-  };
-
-  useEffect(() => {
-    window.addEventListener("keydown", (e) => handlePress(e));
-    return () => {
-      window.removeEventListener("keydown", (e) => handlePress(e));
-    };
-  }, []);
   return (
     <>
       <Ball ref={ball} />
@@ -102,8 +104,8 @@ const Game = ({ size }: Props) => {
       />
       {/* Player 1 */}
       <Padlle
-        position={[positionX, -60 / 2 + 3, 0]}
-        args={[1.5, 2, 40 / 5]}
+        position={[0, -60 / 2 + 3, 0]}
+        args={[1.5, 2, PADDLE_SIZE]}
         rotateX={Math.PI / 2}
         rotateY={Math.PI / 2}
         color="#C70039"
@@ -113,7 +115,7 @@ const Game = ({ size }: Props) => {
       {/* Player 2 */}
       <Padlle
         position={[0, 60 / 2 - 3, 0]}
-        args={[1.5, 2, 40 / 5]}
+        args={[1.5, 2, PADDLE_SIZE]}
         rotateX={Math.PI / 2}
         rotateY={Math.PI / 2}
         color="#00FF00"

@@ -1,6 +1,6 @@
 import { MeshPhysicalMaterial } from "three";
 import Padlle from "./Padlle";
-import React, { useEffect } from "react";
+import React from "react";
 
 const Stage = React.forwardRef((props, ref: any) => {
   const material = new MeshPhysicalMaterial({
