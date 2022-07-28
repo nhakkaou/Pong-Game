@@ -38,6 +38,7 @@ const Padlle = React.forwardRef(
         rotation={[rotateX, rotateY, 0]}
         name={name}
         ref={ref}
+        receiveShadow
       >
         <boxGeometry attach="geometry" args={args} />
       </mesh>

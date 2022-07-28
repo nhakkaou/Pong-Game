@@ -15,7 +15,7 @@ const Stage = React.forwardRef((props, ref: any) => {
   const { refTop, refBottom, refLeft, refRight } = ref;
   return (
     <>
-      <mesh castShadow={true} material={material}>
+      <mesh castShadow={true} material={material} receiveShadow>
         <planeBufferGeometry attach="geometry" args={[40, 60]} />
       </mesh>
       {/* // TOP */}
