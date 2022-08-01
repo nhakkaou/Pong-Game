@@ -26,7 +26,8 @@ class Server {
     });
     io.on("connection", function (socket) {
       gameInst.newGame(socket);
-      gameInst.ballMove(socket);
+      gameInst.ballMove(io, socket);
+      gameInst.padlleMove(socket);
     }).on("disconnect", function (socket) {
       socket.emit("disconnect", { message: "Server Down!!" });
     });

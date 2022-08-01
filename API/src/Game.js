@@ -44,10 +44,11 @@ class Game {
   newGame(socket) {
     socket.on("newGame", () => {
       this.ball.position = [3, 3, 1];
-      socket.emit("ballMove", this.ball.position);
+      // socket.emit("ballMove", this.ball.position);
+      console.log("newGame");
     });
   }
-  ballMove(socket) {
+  ballMove(io, socket) {
     let dx = -1;
     let dy = -1;
     socket.on("ballMove", () => {
@@ -60,12 +61,21 @@ class Game {
       if (
         this.ball.position[1] + dy < -this.stage.h / 2 ||
         this.ball.position[1] + dy > this.stage.h / 2
-      )
+      ) {
+        socket.emit("goal", "player1");
         this.ball.position = [3, 3, 1];
+      }
 
-      this.ball.position[0] += 0.05 * dx;
-      this.ball.position[1] += 0.05 * dy;
+      this.ball.position[0] += 0.2 * dx;
+      this.ball.position[1] += 0.2 * dy;
       socket.emit("ballMove", this.ball.position);
+      console.log(this.ball.position);
+    });
+  }
+  padlleMove(socket) {
+    socket.on("padlleMove", (data) => {
+      this.player1.position[0] += Number(data.right) - Number(data.left);
+      socket.emit("padlleMove", this.player1.position);
     });
   }
 }
