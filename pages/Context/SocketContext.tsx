@@ -9,6 +9,8 @@ interface AppContextInterface {
     y: number;
     z: number;
   };
+  setSymbol: (symbol: boolean) => void;
+  sym: boolean;
 }
 
 export const AppCtx = createContext<AppContextInterface | null>(null);
@@ -19,32 +21,19 @@ export const SocketContext = ({ children }: any) => {
     y: 3,
     z: 1,
   });
-  const [socket, setSocket] = useState<Socket | null>(null);
+  const socket = io("http://localhost:4242");
   const [score, setScore] = useState<Number | 0>(0);
+
   useEffect(() => {
-    const sk = io("http://localhost:4242");
-    console.log("SOCKET", sk);
-    setSocket(sk);
-    return () => {
-      sk.close();
-    };
-  }, []);
-  socket?.on("ballMove", (data: any) => {
-    console.log(score);
-    // if (score < 5) {
-    // socket.emit("ballMove");
-    setBallPosition(data);
-    // } else
-    //   setBallPosition({
-    //     x: 3,
-    //     y: 3,
-    //     z: 1,
-    //   });
-  });
-  socket?.on("goal", (data: any) => {
-    let t: Number = +score + 1;
-    setScore(t);
-  });
+    console.log("HEREE");
+    socket.on("ballMove", (data: any) => {
+      console.log("BALL MOVE", data);
+      setBallPosition(data);
+    });
+    // return () => {
+    //   socket.off("ballMove");
+    // };
+  }, [socket, ballPosition]);
   return (
     <AppCtx.Provider
       value={{

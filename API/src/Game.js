@@ -52,24 +52,31 @@ class Game {
     let dx = -1;
     let dy = -1;
     socket.on("ballMove", () => {
-      if (
-        this.ball.position[0] + dx < -this.stage.w / 2 ||
-        this.ball.position[0] + dx > this.stage.w / 2
-      )
-        dx *= -1;
+      console.log("SALAM");
+      setInterval(() => {
+        console.log(new Date().getMilliseconds());
+        if (
+          this.ball.position[0] + dx < -this.stage.w / 2 ||
+          this.ball.position[0] + dx > this.stage.w / 2
+        )
+          dx *= -1;
 
-      if (
-        this.ball.position[1] + dy < -this.stage.h / 2 ||
-        this.ball.position[1] + dy > this.stage.h / 2
-      ) {
-        socket.emit("goal", "player1");
-        this.ball.position = [3, 3, 1];
-      }
+        if (
+          this.ball.position[1] + dy < -this.stage.h / 2 ||
+          this.ball.position[1] + dy > this.stage.h / 2
+        ) {
+          socket.emit("goal", "player1");
+          this.ball.position = [3, 3, 1];
+        }
 
-      this.ball.position[0] += 0.2 * dx;
-      this.ball.position[1] += 0.2 * dy;
-      socket.emit("ballMove", this.ball.position);
-      console.log(this.ball.position);
+        this.ball.position[0] += 0.5 * dx;
+        this.ball.position[1] += 0.5 * dy;
+        socket.emit("ballMove", {
+          x: this.ball.position[0],
+          y: this.ball.position[1],
+          z: this.ball.position[2],
+        });
+      }, 30);
     });
   }
   padlleMove(socket) {

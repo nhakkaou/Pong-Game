@@ -17,13 +17,11 @@ const Home: NextPage = () => {
           cursor: "pointer",
           zIndex: 999,
         }}
-        onClick={() => {
-          console.log("send", socket);
-          socket.emit("ballMove");
-        }}
+        onClick={() => socket.emit("ballMove")}
       >
         PLAY
       </div>
+
       <div className={styles.container}>
         <Canvas
           shadows={true}

@@ -5,7 +5,6 @@ import Padlle from "./Modules/Padlle";
 import { useEffect, useRef, useContext } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
 import { usePersonControls, resize } from "./Hooks/movement";
-import { Canvas } from "@react-three/fiber";
 
 const PADDLE_SIZE = 40 / 5;
 
@@ -30,9 +29,7 @@ const Game = (props: any) => {
     camera.updateProjectionMatrix();
   }, [size]);
   useFrame(({ gl, scene, camera }) => {
-    ball.current.position.x = ballPosition[0];
-    ball.current.position.y = ballPosition[1];
-    ball.current.position.z = ballPosition[2];
+    ball.current.position.copy(ballPosition);
     gl.render(scene, camera);
   }, 1);
   return (
