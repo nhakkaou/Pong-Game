@@ -1,61 +1,35 @@
-import type { NextPage } from "next";
-import styles from "../styles/Home.module.css";
-import { Canvas } from "@react-three/fiber";
-import Game from "./Game";
-import { AppCtx } from "./Context/SocketContext";
-import { useContext } from "react";
-const Home: NextPage = () => {
-  const { socket, gameData } = useContext(AppCtx);
+import React from "react";
+
+const index = () => {
   return (
-    <>
-      <div
-        style={{
-          color: "white",
-          position: "absolute",
-          fontWeight: "bold",
-          backgroundColor: "transparent",
-          cursor: "pointer",
-          zIndex: 999,
-        }}
-        onClick={() => socket.emit("startGame")}
-      >
-        PLAY
+    <div
+      style={{
+        display: "flex",
+        color: "#FFF",
+        fontSize: "2.5rem",
+      }}
+    >
+      <div style={{ position: "absolute", left: "12%", top: "25%" }}>
+        <h1>Pong Game</h1>
       </div>
       <div
         style={{
-          color: "white",
           position: "absolute",
-          fontWeight: "bolder",
-          backgroundColor: "transparent",
-          cursor: "pointer",
           left: "50%",
-          zIndex: 999,
+          top: "50%",
+          fontSize: "1.5rem",
+          fontWeight: "bold",
+          padding: "15px",
+          background:
+            "radial-gradient(circle, rgba(174,140,250,1) 60%, rgba(116,108,254,1) 100%);",
+          borderRadius: "35px",
+          cursor: "pointer",
         }}
       >
-        {gameData.score.player1} - {gameData.score.player2}
+        Start Game
       </div>
-      <div className={styles.container}>
-        <Canvas
-          shadows={true}
-          camera={{
-            fov: 75,
-            position: [-0.018223506966510716, -54, 20],
-            near: 0.1,
-            far: 1000,
-          }}
-          className={styles.canvas}
-        >
-          <directionalLight
-            position={[0, 0, 10]}
-            color={"white"}
-            intensity={1}
-          />
-          <ambientLight intensity={0.8} color={"white"} />
-          <Game socket={socket} gameData={gameData} />
-        </Canvas>
-      </div>
-    </>
+    </div>
   );
 };
 
-export default Home;
+export default index;

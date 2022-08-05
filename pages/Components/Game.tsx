@@ -1,10 +1,10 @@
 import React from "react";
-import Ball from "./Modules/Ball";
-import Stage from "./Modules/Stage";
-import Padlle from "./Modules/Padlle";
+import Ball from "../Modules/Ball";
+import Stage from "../Modules/Stage";
+import Padlle from "../Modules/Padlle";
 import { useEffect, useRef, useContext } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
-import { usePersonControls, resize } from "./Hooks/movement";
+import { usePersonControls, resize } from "../Hooks/movement";
 
 const PADDLE_SIZE = 40 / 5;
 
