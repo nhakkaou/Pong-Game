@@ -1,44 +1,70 @@
-import { io, Socket } from "socket.io-client";
+import { io } from "socket.io-client";
 import { createContext } from "react";
 import React, { useEffect, useState } from "react";
 
-interface AppContextInterface {
-  socket: Socket | null;
-  ballPosition: {
-    x: number;
-    y: number;
-    z: number;
+type Position = {
+  x: Number;
+  y: Number;
+  z: Number;
+};
+type GameDataType = {
+  ball: Position;
+  player1: Position;
+  player2: Position;
+  speed: Number;
+  score: {
+    player1: Number;
+    player2: Number;
   };
-  setSymbol: (symbol: boolean) => void;
-  sym: boolean;
+};
+interface AppContextInterface {
+  socket: any | null;
+  gameData: GameDataType;
 }
-
 export const AppCtx = createContext<AppContextInterface | null>(null);
 
+const socket = io("http://localhost:4242");
 export const SocketContext = ({ children }: any) => {
-  const [ballPosition, setBallPosition] = useState({
-    x: 3,
-    y: 3,
-    z: 1,
+  const [gameData, setData] = useState<GameDataType>({
+    ball: {
+      x: 3,
+      y: 3,
+      z: 1,
+    },
+    player1: {
+      x: 0,
+      y: -60 / 2 + 3,
+      z: 0,
+    },
+    player2: {
+      x: 0,
+      y: 60 / 2 - 3,
+      z: 0,
+    },
+    speed: 0.1,
+    score: {
+      player1: 0,
+      player2: 0,
+    },
   });
-  const socket = io("http://localhost:4242");
-  const [score, setScore] = useState<Number | 0>(0);
 
   useEffect(() => {
     console.log("HEREE");
-    socket.on("ballMove", (data: any) => {
-      console.log("BALL MOVE", data);
-      setBallPosition(data);
+    socket.on("gameData", (data: GameDataType) => {
+      console.log(data);
+      setData(data);
     });
-    // return () => {
-    //   socket.off("ballMove");
-    // };
-  }, [socket, ballPosition]);
+    if (gameData.score.player1 === 10 || gameData.score.player2 === 10)
+      socket.emit("gameOver");
+    return () => {
+      socket.off("gameData");
+    };
+  }, [gameData]);
   return (
     <AppCtx.Provider
       value={{
         socket,
-        ballPosition,
+        gameData,
       }}
     >
       {children}

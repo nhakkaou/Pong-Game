@@ -28,6 +28,7 @@ class Server {
       gameInst.newGame(socket);
       gameInst.ballMove(io, socket);
       gameInst.padlleMove(socket);
+      gameInst.gameOver(socket);
     }).on("disconnect", function (socket) {
       socket.emit("disconnect", { message: "Server Down!!" });
     });

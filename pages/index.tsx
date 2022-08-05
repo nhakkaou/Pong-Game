@@ -5,7 +5,7 @@ import Game from "./Game";
 import { AppCtx } from "./Context/SocketContext";
 import { useContext } from "react";
 const Home: NextPage = () => {
-  const { socket, ballPosition } = useContext(AppCtx);
+  const { socket, gameData } = useContext(AppCtx);
   return (
     <>
       <div
@@ -17,11 +17,23 @@ const Home: NextPage = () => {
           cursor: "pointer",
           zIndex: 999,
         }}
-        onClick={() => socket.emit("ballMove")}
+        onClick={() => socket.emit("startGame")}
       >
         PLAY
       </div>
-
+      <div
+        style={{
+          color: "white",
+          position: "absolute",
+          fontWeight: "bolder",
+          backgroundColor: "transparent",
+          cursor: "pointer",
+          left: "50%",
+          zIndex: 999,
+        }}
+      >
+        {gameData.score.player1} - {gameData.score.player2}
+      </div>
       <div className={styles.container}>
         <Canvas
           shadows={true}
@@ -39,7 +51,7 @@ const Home: NextPage = () => {
             intensity={1}
           />
           <ambientLight intensity={0.8} color={"white"} />
-          <Game socket={socket} ballPosition={ballPosition} />
+          <Game socket={socket} gameData={gameData} />
         </Canvas>
       </div>
     </>
