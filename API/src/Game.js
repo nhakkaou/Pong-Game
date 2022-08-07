@@ -71,7 +71,7 @@ class Game {
         )
           dx *= -1;
         if (
-          (this.gameData.ball.y + dy == this.gameData.player2.y  ||
+          this.gameData.ball.y + dy == this.gameData.player2.y ||
           (this.gameData.ball.y + dy == this.gameData.player1.y &&
             this.gameData.ball.x + dx >=
               this.gameData.player1.x - player1.size / 2 &&
@@ -114,16 +114,17 @@ class Game {
       if (
         this.gameData.player1.x +
           player1.size / 2 +
-          Number(data.right) -
-          Number(data.left) <
+          Number(data.right) * 3 -
+          Number(data.left) * 3 <
           stage.w / 2 &&
         this.gameData.player1.x -
           player1.size / 2 +
-          Number(data.right) -
-          Number(data.left) >
+          Number(data.right) * 3 -
+          Number(data.left) * 3 >
           -stage.w / 2
       )
-        this.gameData.player1.x += Number(data.right) - Number(data.left);
+        this.gameData.player1.x +=
+          Number(data.right) * 3 - Number(data.left) * 3;
       console.log(this.gameData.player1);
       socket.emit("gameData", {
         ...this.gameData,
