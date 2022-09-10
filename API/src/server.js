@@ -34,8 +34,8 @@ class Server {
     });
   }
   listen() {
-    this.http.listen(4242, () => {
-      console.log(`Listening on http://localhost:4242`);
+    this.http.listen(3001, () => {
+      console.log(`Listening on http://localhost:3001`);
     });
   }
 }
