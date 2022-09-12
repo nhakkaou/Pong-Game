@@ -23,7 +23,7 @@ interface AppContextInterface {
 }
 export const AppCtx = createContext<AppContextInterface | null>(null);
 
-const socket = io("http://localhost:4000");
+const socket = io("http://localhost:3001");
 export const SocketContext = ({ children }: any) => {
   const [gameData, setData] = useState<GameDataType>({
     ball: {
