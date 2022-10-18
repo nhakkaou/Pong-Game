@@ -50,6 +50,7 @@ const Home: NextPage = () => {
             color={"white"}
             intensity={1}
           />
+          <axesHelper args={[200, 200, 200]} />
           <ambientLight intensity={0.8} color={"white"} />
           <Game socket={socket} gameData={gameData} />
         </Canvas>

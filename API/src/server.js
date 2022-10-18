@@ -7,7 +7,6 @@ const Game = require("./Game");
 class Server {
   constructor() {
     let Players = [];
-    let Rooms = [];
     this.app = express();
     this.app.use(bodyParser.json());
     this.app.use(
@@ -25,10 +24,13 @@ class Server {
       },
     });
     io.on("connection", function (socket) {
+      console.log(Players);
       gameInst.newGame(socket);
       gameInst.ballMove(io, socket);
       gameInst.padlleMove(socket);
       gameInst.gameOver(socket);
+      gameInst.findGame(socket, Players);
+      gameInst.disconnect(socket, Players);
     }).on("disconnect", function (socket) {
       socket.emit("disconnect", { message: "Server Down!!" });
     });

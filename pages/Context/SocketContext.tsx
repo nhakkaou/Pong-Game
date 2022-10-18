@@ -27,8 +27,8 @@ const socket = io("http://localhost:3001");
 export const SocketContext = ({ children }: any) => {
   const [gameData, setData] = useState<GameDataType>({
     ball: {
-      x: 3,
-      y: 3,
+      x: 0,
+      y: 0,
       z: 1,
     },
     player1: {

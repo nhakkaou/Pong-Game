@@ -1,5 +1,5 @@
 let ball = {
-  position: { x: 3, y: 3, z: 1 },
+  position: { x: 0, y: 0, z: 1 },
   args: [1, 100, 100],
 };
 let stage = {
@@ -66,8 +66,8 @@ class Game {
     socket.on("startGame", () => {
       this.interval = setInterval(() => {
         if (
-          this.gameData.ball.x + dx < -stage.w / 2 ||
-          this.gameData.ball.x + dx > stage.w / 2
+          this.gameData.ball.x + dx < -stage.w / 2 + stage.cLeft.args[1] ||
+          this.gameData.ball.x + dx > stage.w / 2 - stage.cRight.args[1]
         )
           dx *= -1;
         if (
@@ -130,6 +130,26 @@ class Game {
         ...this.gameData,
         player1: this.gameData.player1,
       });
+    });
+  }
+
+  findGame(socket, players) {
+    socket.on("findGame", (data) => {
+      console.log("dtata", players);
+      let player1 = players.find((e) => (e.status = "pending"));
+      if (!player1) players.push({ id: socket.id, status: "pending" });
+      let room = Math.random(9999);
+      socket.join(room);
+      socket.emit("joinRoom", {
+        player1: player1.id,
+        player2: socket.id,
+      });
+    });
+  }
+  disconnect(socket, players) {
+    socket.on("disconnect", (data) => {
+      console.log("HELLO");
+      players = players.filter((e) => e.id != socket.id);
     });
   }
 }

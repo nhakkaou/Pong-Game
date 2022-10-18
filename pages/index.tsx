@@ -1,6 +1,13 @@
-import React from "react";
+import React, { useContext, useState } from "react";
+import { AppCtx } from "./Context/SocketContext";
 
 const index = () => {
+  const { socket, gameData } = useContext(AppCtx);
+  const [load, setLoading] = useState(false);
+  const findMatch = () => {
+    socket.emit("findGame");
+    setLoading(!load);
+  };
   return (
     <div
       style={{
@@ -25,8 +32,9 @@ const index = () => {
           borderRadius: "35px",
           cursor: "pointer",
         }}
+        onClick={findMatch}
       >
-        Start Game
+        {!load ? "Play online" : "Loading ..."}
       </div>
     </div>
   );

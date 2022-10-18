@@ -15,7 +15,7 @@ const Ball = React.forwardRef(({ color = "#1C1B27" }: Props, ref: any) => {
     clearcoatRoughness: 0.5,
   });
   return (
-    <mesh position={[3, 3, 1]} material={meterial} ref={ref} receiveShadow>
+    <mesh position={[0, 0, 1]} material={meterial} ref={ref} receiveShadow>
       <sphereBufferGeometry attach="geometry" args={[1, 100, 100]} />
     </mesh>
   );
