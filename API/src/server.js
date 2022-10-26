@@ -24,12 +24,12 @@ class Server {
       },
     });
     io.on("connection", function (socket) {
-      console.log(Players);
+      // console.log(Players);
       gameInst.newGame(socket);
       gameInst.ballMove(io, socket);
       gameInst.padlleMove(socket);
       gameInst.gameOver(socket);
-      gameInst.findGame(socket, Players);
+      gameInst.findGame(io, socket, Players);
       gameInst.disconnect(socket, Players);
     }).on("disconnect", function (socket) {
       socket.emit("disconnect", { message: "Server Down!!" });

@@ -21,7 +21,6 @@ const Game = (props: any) => {
 
   let { left, right } = usePersonControls();
   let size = resize();
-  console.log(gameData);
   useEffect(() => {
     if (left || right) socket.emit("padlleMove", { left, right });
   }, [left, right]);

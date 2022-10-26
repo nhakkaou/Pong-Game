@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 
 export const usePersonControls = () => {
   const keys = {
-    KeyA: "left",
-    KeyD: "right",
+    ArrowRight: "right",
+    ArrowLeft: "left",
   };
 
   const moveFieldByKey = (key) => keys[key];
@@ -15,6 +15,7 @@ export const usePersonControls = () => {
 
   useEffect(() => {
     const handleKeyDown = (e) => {
+      console.log(e.code);
       setMovement((m) => ({ ...m, [moveFieldByKey(e.code)]: true }));
     };
     const handleKeyUp = (e) => {

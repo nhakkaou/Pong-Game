@@ -1,6 +1,7 @@
 import { io } from "socket.io-client";
 import { createContext } from "react";
 import React, { useEffect, useState } from "react";
+import Router from "next/router";
 
 type Position = {
   x: Number;
@@ -47,19 +48,21 @@ export const SocketContext = ({ children }: any) => {
       player2: 0,
     },
   });
-
+  socket.on("joinRoom", (data) => {
+    alert("Match Found !");
+    console.log(data);
+    Router.push("/room/" + data.room);
+  });
   useEffect(() => {
     console.log("HEREE");
     socket.on("gameData", (data: GameDataType) => {
       console.log(data);
       setData(data);
     });
-    if (gameData.score.player1 === 10 || gameData.score.player2 === 10)
-      socket.emit("gameOver");
     return () => {
       socket.off("gameData");
     };
-  }, [gameData]);
+  }, [gameData.ball]);
   return (
     <AppCtx.Provider
       value={{

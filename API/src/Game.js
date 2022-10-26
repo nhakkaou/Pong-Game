@@ -58,6 +58,10 @@ class Game {
     socket.on("gameOver", () => {
       console.log("gameOver");
       clearInterval(this.interval);
+      socket.emit("gameData", {
+        ...this.gameData,
+        ball: ball.position,
+      });
     });
   }
   ballMove(io, socket) {
@@ -125,7 +129,6 @@ class Game {
       )
         this.gameData.player1.x +=
           Number(data.right) * 3 - Number(data.left) * 3;
-      console.log(this.gameData.player1);
       socket.emit("gameData", {
         ...this.gameData,
         player1: this.gameData.player1,
@@ -133,22 +136,30 @@ class Game {
     });
   }
 
-  findGame(socket, players) {
-    socket.on("findGame", (data) => {
-      console.log("dtata", players);
-      let player1 = players.find((e) => (e.status = "pending"));
-      if (!player1) players.push({ id: socket.id, status: "pending" });
-      let room = Math.random(9999);
-      socket.join(room);
-      socket.emit("joinRoom", {
-        player1: player1.id,
-        player2: socket.id,
-      });
+  findGame(io, socket, players) {
+    socket.on("findGame", () => {
+      let player1 = players.findIndex((e) => (e.status = "pending"));
+      console.log(players, player1);
+      if (player1 == -1) players.push({ id: socket.id, status: "pending" });
+      else {
+        let id = players[player1].id;
+        console.log("player1: ", `"${id}"`);
+        console.log(io.sockets.connected);
+        console.log(io.sockets[`'${id}'`]);
+        players.push({ id: socket.id, status: "playing" });
+        players[player1].status = "playing";
+        let room = Math.floor(Math.random() * 99999);
+        io.to(id).to(socket.id).emit("joinRoom", {
+          player1: id,
+          player2: socket.id,
+          room,
+        });
+      }
     });
   }
   disconnect(socket, players) {
     socket.on("disconnect", (data) => {
-      console.log("HELLO");
+      clearInterval(this.interval);
       players = players.filter((e) => e.id != socket.id);
     });
   }

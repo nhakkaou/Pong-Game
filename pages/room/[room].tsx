@@ -1,9 +1,10 @@
 import type { NextPage } from "next";
-import styles from "../styles/Home.module.css";
+import styles from "../../styles/Home.module.css";
 import { Canvas } from "@react-three/fiber";
-import Game from "./Components/Game";
-import { AppCtx } from "./Context/SocketContext";
+import Game from "../Components/Game";
+import { AppCtx } from "../Context/SocketContext";
 import { useContext } from "react";
+import { PointLightShadow } from "three";
 const Home: NextPage = () => {
   const { socket, gameData } = useContext(AppCtx);
   return (
@@ -45,10 +46,12 @@ const Home: NextPage = () => {
           }}
           className={styles.canvas}
         >
-          <directionalLight
-            position={[0, 0, 10]}
+          <pointLight
+            position={[0, 0, 20]}
             color={"white"}
             intensity={1}
+            // angle={20}
+            // distance={100}
           />
           <axesHelper args={[200, 200, 200]} />
           <ambientLight intensity={0.8} color={"white"} />
