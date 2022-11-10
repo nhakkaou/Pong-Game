@@ -75,8 +75,8 @@ class Game {
         )
           dx *= -1;
         if (
-          this.gameData.ball.y + dy == this.gameData.player2.y ||
-          (this.gameData.ball.y + dy == this.gameData.player1.y &&
+          this.gameData.ball.y + dy - 0.5 == this.gameData.player2.y ||
+          (this.gameData.ball.y + dy - 0.5 == this.gameData.player1.y &&
             this.gameData.ball.x + dx >=
               this.gameData.player1.x - player1.size / 2 &&
             this.gameData.ball.x + dx <=
@@ -109,7 +109,7 @@ class Game {
             z: this.gameData.ball.z,
           },
         });
-      }, 1000 / 60);
+      }, 1000 / 100);
       // clearInterval(interval);
     });
   }
@@ -159,6 +159,7 @@ class Game {
   }
   disconnect(socket, players) {
     socket.on("disconnect", (data) => {
+      console.log("Hello");
       clearInterval(this.interval);
       players = players.filter((e) => e.id != socket.id);
     });
